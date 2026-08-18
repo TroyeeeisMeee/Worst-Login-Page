@@ -1,0 +1,28 @@
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+        
+        <div id="usernameSection">
+            <h1 class="text-2xl font-bold text-center mb-6">Create Account</h1>
+            <input type="text" id="username1" placeholder="Username"
+                class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+            <button id="submitUsername" type="button"
+                class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+                Next
+            </button>
+        </div>
+
+        <div id="passwordSection" style="display:none;">
+            <h1 class="text-2xl font-bold text-center mb-6">Create Password</h1>
+            <p class="text-xs text-gray-400 mb-2">Must be 8+ characters, include a number and one of: ! @ # $ % ^ & *</p>
+            <input type="password" id="password1" placeholder="Password"
+                class="w-full border border-gray-300 rounded px-3 py-2 mb-4">
+            <button id="submitPassword" type="button"
+                class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+                Register
+            </button>
+        </div>
+
+    </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js"></script>
+</body>
