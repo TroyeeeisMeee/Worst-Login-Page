@@ -33,10 +33,10 @@ const colors = ["#ef4444","#f97316","#a855f7","#3b82f6","#22c55e","#ec4899"];
 function spawnBalloon() {
     balloons.push({
         x: Math.random() * (canvas.width - 80) + 40,
-        y: canvas.height + 30,
+        y: canvas.height + 40,
         letter: letters[Math.floor(Math.random() * letters.length)],
         radius: 30,
-        speed: Math.random() * 1.5 + 1.5,
+        speed: Math.random() * 1.5 + 1,
         color: colors[Math.floor(Math.random() * colors.length)]
     });
 }
@@ -44,18 +44,20 @@ function spawnBalloon() {
 let balloonsSpawned = 0;
 
 function spawnInitial() {
-    if (balloonsSpawned < 60) {
+    if (balloonsSpawned < 25) {
         spawnBalloon();
         balloonsSpawned++;
-        setTimeout(spawnInitial, 100);
+        setTimeout(spawnInitial, 55);
     }
 }
 
 spawnInitial();
 
 function gameLoop() {
+    // 1. Clear first
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // 2. Balloons
     for (let i = balloons.length - 1; i >= 0; i--) {
         const b = balloons[i];
         b.y -= b.speed;
@@ -77,7 +79,19 @@ function gameLoop() {
         ctx.fillText(b.letter, b.x, b.y);
     }
 
-    ctx.fillStyle = "white";
+    // 3. Typed text — after balloons so it's on top
+    const displayText = currentPhase === "username"
+        ? typedSoFar.join("")
+        : "*".repeat(typedSoFar.length);
+
+    ctx.fillStyle = "black";
+    ctx.font = "bold 24px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillText(displayText, canvas.width / 2, 20);
+
+    // 4. Dart — black so it's visible
+    ctx.fillStyle = "black";
     ctx.beginPath();
     ctx.moveTo(mouseX, mouseY);
     ctx.lineTo(mouseX - 8, mouseY + 20);
@@ -85,6 +99,7 @@ function gameLoop() {
     ctx.closePath();
     ctx.fill();
 
+    // 5. Collision check
     for (let i = balloons.length - 1; i >= 0; i--) {
         const b = balloons[i];
         const dist = Math.sqrt((mouseX - b.x)**2 + (mouseY - b.y)**2);
@@ -117,6 +132,7 @@ submitBtn.addEventListener("click", function() {
         } else {
             alert("Wrong username. Try again.");
             typedSoFar = [];
+            resetBalloons();
         }
         return;
     }
@@ -142,6 +158,13 @@ submitBtn.addEventListener("click", function() {
             alert("Wrong password.");
             typedSoFar = [];
             window.location.href = "game.html";
+            resetBalloons();
         }
     }
+    function resetBalloons() {
+    balloons.length = 0;
+    balloonsSpawned = 0;
+    spawnInitial();
+}
+
 });
